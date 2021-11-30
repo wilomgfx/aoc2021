@@ -1,14 +1,15 @@
 import { test, readInput } from "../utils/index"
 
-const prepareInput = (rawInput: string) => rawInput
+type RawInput = string;
+const prepareInput = (rawInput: RawInput) => rawInput
 
 const input = prepareInput(readInput())
 
-const goA = (input) => {
+const goA = (input: RawInput) => {
   return
 }
 
-const goB = (input) => {
+const goB = (input: RawInput) => {
   return
 }
 

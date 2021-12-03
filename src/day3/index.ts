@@ -163,7 +163,7 @@ const goB = (input: RawInput) => {
 /* Tests */
 
 test(goA(input), 3429254)
-test(goB(input), 230)
+test(goB(input), 5410338)
 
 /* Results */
 

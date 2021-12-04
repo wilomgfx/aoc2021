@@ -26,13 +26,15 @@ const checkForValidNumbersInRow = (
 ) => {
   const rowsMap: Map<number, { [x: number]: boolean }[]> = new Map()
   const rows = []
-  for (const [index, row] of board.entries()) {
+  for (const row of board) {
     const parsedRow = row!.split(" ").filter(Boolean).map(Number)
-    const rowNum = parsedRow![index]
-    if (draw.includes(rowNum)) {
-      rows.push({ [rowNum]: true })
+    console.log(parsedRow)
+    for (const rowNum of parsedRow) {
+      if (draw.includes(Number(rowNum))) {
+        rows.push({ [rowNum]: true })
+      }
+      if (!rowsMap.has(boardIndex)) rowsMap.set(boardIndex, rows)
     }
-    if (!rowsMap.has(boardIndex)) rowsMap.set(boardIndex, rows)
   }
   console.log(rowsMap)
   return rowsMap

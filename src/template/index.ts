@@ -1,11 +1,14 @@
 import { test, readInput } from "../utils/index"
+import * as os from "os"
 
-type RawInput = string;
+type RawInput = string
 const prepareInput = (rawInput: RawInput) => rawInput
 
 const input = prepareInput(readInput())
 
 const goA = (input: RawInput) => {
+  const diagnostics = input.split(os.EOL)
+
   return
 }
 

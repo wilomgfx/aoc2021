@@ -8,6 +8,8 @@ const prepareInput = (rawInput: RawInput) => rawInput
 
 const input = prepareInput(readInput())
 
+type BoardColRowCheck = Map<number, number[]>
+
 const getNextDraw = (draws: number[], drawNumber: number) => {
   const nextSlice = 6 * (drawNumber - 1)
   if (drawNumber === 1) {
@@ -24,19 +26,17 @@ const checkForValidNumbersInRow = (
   board: (string | undefined)[],
   boardIndex: number,
 ) => {
-  const rowsMap: Map<number, { [x: number]: boolean }[]> = new Map()
+  const rowsMap: BoardColRowCheck = new Map()
   const rows = []
   for (const row of board) {
     const parsedRow = row!.split(" ").filter(Boolean).map(Number)
-    console.log(parsedRow)
-    for (const rowNum of parsedRow) {
+    for (const [index, rowNum] of parsedRow.entries()) {
       if (draw.includes(Number(rowNum))) {
-        rows.push({ [rowNum]: true })
+        rows.push(index)
       }
       if (!rowsMap.has(boardIndex)) rowsMap.set(boardIndex, rows)
     }
   }
-  console.log(rowsMap)
   return rowsMap
 }
 
@@ -45,20 +45,34 @@ const checkForValidNumbersInCol = (
   board: (string | undefined)[],
   boardIndex: number,
 ) => {
-  const colsMap: Map<number, { [x: number]: boolean }[]> = new Map()
+  const colsMap: BoardColRowCheck = new Map()
   const cols = []
   for (const [index, row] of board.entries()) {
     const parsedRow = row!.split(" ").filter(Boolean).map(Number)
 
     const col = parsedRow![index]
-    console.log(col)
     if (draw.includes(col)) {
-      cols.push({ [col]: true })
+      cols.push(index)
     }
     if (!colsMap.has(boardIndex)) colsMap.set(boardIndex, cols)
   }
-  console.log(colsMap)
   return colsMap
+}
+
+const checkForWinner = (
+  boardIndex: number,
+  cols: BoardColRowCheck,
+  rows: BoardColRowCheck,
+) => {
+  const rowsValues = rows.get(boardIndex)
+  const colsValues = cols.get(boardIndex)
+  console.log(`rows`, rowsValues)
+  console.log(`cols`, colsValues)
+  const winningRow = [0, 1, 2, 3, 4].every((v) => rowsValues?.includes(v))
+  const winningCol = [0, 1, 2, 3, 4].every((v) => colsValues?.includes(v))
+  console.log(`row win ${winningRow}`)
+  console.log(`col win ${winningCol}`)
+  return winningRow || winningCol
 }
 
 const goA = (input: RawInput) => {
@@ -89,8 +103,10 @@ const goA = (input: RawInput) => {
     // console.log(board)
     const nextDraw = getNextDraw(draws, gameNumber)
     // console.log(nextDraw)
-    checkForValidNumbersInRow(nextDraw, board, boardIndex)
-    // checkForValidNumbersInCol(nextDraw, board, boardIndex)
+    const rows = checkForValidNumbersInRow(nextDraw, board, boardIndex)
+    const cols = checkForValidNumbersInCol(nextDraw, board, boardIndex)
+    const isWinner = checkForWinner(boardIndex, cols, rows)
+    console.log(`is board ${boardIndex} the winner ? ${isWinner}`)
     gameNumber++
   }
   return

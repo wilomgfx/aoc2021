@@ -5,6 +5,7 @@ type RawInput = string
 const prepareInput = (rawInput: RawInput) => rawInput
 
 const input = prepareInput(readInput())
+const testInput = prepareInput(readInput("test-input.txt"))
 
 const goA = (input: RawInput) => {
   const diagnostics = input.split(os.EOL)

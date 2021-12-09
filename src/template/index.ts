@@ -19,14 +19,17 @@ const goB = (input: RawInput) => {
 
 /* Tests */
 
-// test()
+// test(goA(testInput))
+// test(goB(testInput))
 
 /* Results */
 
-console.time("Time")
+console.time("Time p1")
 const resultA = goA(input)
+console.timeEnd("Time p1")
+console.time("Time p2")
 const resultB = goB(input)
-console.timeEnd("Time")
+console.timeEnd("Time p2")
 
 console.log("Solution to part 1:", resultA)
 console.log("Solution to part 2:", resultB)

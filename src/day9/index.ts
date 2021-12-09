@@ -18,28 +18,43 @@ const isCornerCase = (rowLength: number, numIndex: number, side: string) => {
 const getAdjacentNumbers = (map: string[], numIndex: number) => {
   const rowLength = getRowLength(map)
   const numOfRows = getNumOfRows(map)
-  const mapIndex = 0
-  console.log(`Num: ${map[mapIndex][numIndex]}`)
+  const rowIndex = 4
+  console.log(`Num: ${map[rowIndex][numIndex]}`)
+  let rightNumber = '';
+  let leftNumber = '';
+  let downNumber = '';
+  let upNumber = '';
+  // top of map
+  // @ts-ignore
+  if(rowIndex !== 0) {
+    upNumber = map[rowIndex -1][numIndex]
+  }
+  //end of map
+  if(rowIndex !== numOfRows -1) {
+    downNumber = map[rowIndex + 1][numIndex]
+  }
   if (isCornerCase(rowLength, numIndex, "start")) {
-    console.log("begining of row")
-    // check for rowIndex, if 0 only (down, right)
-    const rightNumber = map[mapIndex][numIndex + 1]
-    const downNumber = map[mapIndex + 1][numIndex]
-    console.log(`right ${rightNumber} down ${downNumber}`)
+    rightNumber = map[rowIndex][numIndex + 1]
     // otherwise numbers (up, down, right)
   }
-  if (isCornerCase(rowLength, numIndex, "end")) {
-    console.log("end of row")
-    // check for rowIndex, if 0 only (down, left)
-    // otherwise (up, down, left)
+  else if (isCornerCase(rowLength, numIndex, "end")) {
+    leftNumber = map[rowIndex][numIndex -1]
+  } else {
+    rightNumber = map[rowIndex][numIndex + 1]
+    leftNumber = map[rowIndex][numIndex - 1]
+
   }
+  console.log(`right ${rightNumber} left ${leftNumber} down ${downNumber} up ${upNumber}`)
 }
 
 const goA = (input: RawInput) => {
   const inputSplit = testInput.trim().split(os.EOL)
   getAdjacentNumbers(inputSplit, 0)
   console.log("------")
+  getAdjacentNumbers(inputSplit, 1)
+  console.log("------")
   getAdjacentNumbers(inputSplit, 9)
+  console.log("------")
   return 2
 }
 

@@ -1,5 +1,6 @@
 import { test, readInput } from "../utils/index"
 import * as os from "os"
+import { sum } from "lodash"
 
 type RawInput = string
 const prepareInput = (rawInput: RawInput) => rawInput
@@ -15,17 +16,14 @@ const isCornerCase = (rowLength: number, numIndex: number, side: string) => {
   return numIndex === rowLength - 1
 }
 
-const getAdjacentNumbers = (map: string[], numIndex: number) => {
+const getAdjacentNumbers = (map: string[], rowIndex: number, numIndex: number) => {
   const rowLength = getRowLength(map)
   const numOfRows = getNumOfRows(map)
-  const rowIndex = 4
-  console.log(`Num: ${map[rowIndex][numIndex]}`)
   let rightNumber = '';
   let leftNumber = '';
   let downNumber = '';
   let upNumber = '';
   // top of map
-  // @ts-ignore
   if(rowIndex !== 0) {
     upNumber = map[rowIndex -1][numIndex]
   }
@@ -44,18 +42,40 @@ const getAdjacentNumbers = (map: string[], numIndex: number) => {
     leftNumber = map[rowIndex][numIndex - 1]
 
   }
-  console.log(`right ${rightNumber} left ${leftNumber} down ${downNumber} up ${upNumber}`)
+  // console.log(`right ${rightNumber} left ${leftNumber} down ${downNumber} up ${upNumber}`)
+  return [rightNumber, leftNumber, downNumber, upNumber].filter(Boolean).map(Number)
+}
+
+const isNumberIsLowerThanAdjacents = (adjacentNumbers: number[], num: number) => {
+  return adjacentNumbers.every(n => n > num)
 }
 
 const goA = (input: RawInput) => {
-  const inputSplit = testInput.trim().split(os.EOL)
-  getAdjacentNumbers(inputSplit, 0)
-  console.log("------")
-  getAdjacentNumbers(inputSplit, 1)
-  console.log("------")
-  getAdjacentNumbers(inputSplit, 9)
-  console.log("------")
-  return 2
+  const map = input.trim().split(os.EOL)
+  const numOfRows = getNumOfRows(map)
+  const rowLength = getRowLength(map)
+  const lowNumbers = []
+  // getAdjacentNumbers(map, 0)
+  // console.log("------")
+  // getAdjacentNumbers(map, 1)
+  // console.log("------")
+  // getAdjacentNumbers(map, 9)
+  // console.log("------")
+  for(let rowIndex = 0; rowIndex < numOfRows; rowIndex++) {
+    // console.log(map[rowIndex])
+    for(let numIndex = 0; numIndex < rowLength; numIndex++) {
+      const num = Number(map[rowIndex][numIndex]);
+      // console.log(num)
+
+      const adjacentNumbers = getAdjacentNumbers(map, rowIndex, numIndex);
+      // console.log(adjacentNumbers)
+      if(isNumberIsLowerThanAdjacents(adjacentNumbers, num))
+        lowNumbers.push(num)
+    }
+  }
+  console.log(lowNumbers)
+
+  return sum(lowNumbers.map(ln => ln+1));
 }
 
 const goB = (input: RawInput) => {
@@ -64,7 +84,8 @@ const goB = (input: RawInput) => {
 
 /* Tests */
 
-test(goA(input), 15)
+test(goA(testInput), 15)
+// test(goA(input), 15)
 // test(goB(input), 15)
 
 /* Results */

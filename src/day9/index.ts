@@ -73,19 +73,39 @@ const goA = (input: RawInput) => {
         lowNumbers.push(num)
     }
   }
-  console.log(lowNumbers)
 
   return sum(lowNumbers.map(ln => ln+1));
 }
 
+
 const goB = (input: RawInput) => {
-  return
+  const map = input.trim().split(os.EOL)
+
+  const NOT_A_BASIN_HEIGHT = 9
+
+  const numOfRows = getNumOfRows(map)
+  const rowLength = getRowLength(map)
+  const lowNumbers = []
+
+  for(let rowIndex = 0; rowIndex < numOfRows; rowIndex++) {
+
+    for(let numIndex = 0; numIndex < rowLength; numIndex++) {
+      const num = Number(map[rowIndex][numIndex]);
+
+      const adjacentNumbers = getAdjacentNumbers(map, rowIndex, numIndex);
+
+      if(isNumberIsLowerThanAdjacents(adjacentNumbers, num))
+        lowNumbers.push(num)
+    }
+  }
+  return 2
 }
 
 /* Tests */
 
 test(goA(testInput), 15)
-// test(goA(input), 15)
+test(goB(testInput), 1134)
+// test(goA(input), 633)
 // test(goB(input), 15)
 
 /* Results */
